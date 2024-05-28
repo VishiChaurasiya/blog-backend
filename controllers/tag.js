@@ -6,7 +6,7 @@ async function getTags(req, res) {
 
     res.status(200).json(tags);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching tags" });
+    res.status(500).json({ error: "Something went wrong" });
   }
 }
 

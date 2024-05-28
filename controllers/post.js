@@ -5,7 +5,6 @@ async function getPosts(req, res) {
   try {
     const { keyword, _sort, _order, _page = 1, _limit = 10, tag } = req.query;
 
-    // Build the query object
     let query = {};
     if (keyword) {
       query.$or = [
@@ -20,13 +19,11 @@ async function getPosts(req, res) {
       }
     }
 
-    // Build the sort object
     let sort = {};
     if (_sort) {
       sort[_sort] = _order === "desc" ? -1 : 1;
     }
 
-    // Pagination options
     const page = parseInt(_page, 10);
     const limit = parseInt(_limit, 10);
     const skip = (page - 1) * limit;
@@ -39,7 +36,7 @@ async function getPosts(req, res) {
 
     res.status(200).json(posts);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching posts" });
+    res.status(500).json({ error: "Something went wrong" });
   }
 }
 
@@ -68,9 +65,6 @@ async function createPost(req, res) {
         slug: { $in: JSON.parse(tags) },
       });
 
-      if (!tagObjects)
-        return res.status(400).json({ error: "Invalid tags are sent" });
-
       const tagIds = tagObjects.map((tag) => tag._id);
       newPost.tags = tagIds;
     }
@@ -79,7 +73,7 @@ async function createPost(req, res) {
 
     res.status(201).json(newPost);
   } catch (error) {
-    res.status(500).json({ error: "Error creating post" });
+    res.status(500).json({ error: "Something went wrong" });
   }
 }
 
