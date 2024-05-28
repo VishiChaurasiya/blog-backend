@@ -1,14 +1,16 @@
+require("dotenv").config();
+
 const express = require("express");
 const { connectToMongoDB } = require("./connect");
 const postRoute = require("./routes/post");
 const tagRoute = require("./routes/tag");
 
 const app = express();
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PORT || 3000;
 
-connectToMongoDB(
-  process.env.MONGODB ?? "mongodb://localhost:27017/blog-backend"
-)
+console.log(process.env.MONGODB);
+
+connectToMongoDB(process.env.MONGODB)
   .then(() => console.log("Mongodb connected"))
   .catch((err) => console.log({ err }));
 
