@@ -16,7 +16,7 @@ connectToMongoDB(process.env.MONGODB)
 
 app.use(express.json());
 
-app.use("/post", postRoute);
-app.use("/tag", tagRoute);
+app.use("/blog/post", postRoute);
+app.use("/blog/tag", tagRoute);
 
 app.listen(PORT, () => console.log(`Server started listening at PORT:${PORT}`));
