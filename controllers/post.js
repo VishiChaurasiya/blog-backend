@@ -1,5 +1,6 @@
 const Post = require("../models/post");
 const Tag = require("../models/tag");
+const cloudinary = require("../utils/cloudinary");
 
 async function getPosts(req, res) {
   try {
@@ -54,6 +55,18 @@ async function getPosts(req, res) {
 
 async function createPost(req, res) {
   try {
+    let uploadedFile = null;
+    if (req.file) {
+      uploadedFile = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload(req.file.path, (err, result) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(result);
+        });
+      });
+    }
+
     const { slug, title, desc, author, tags } = req.body;
 
     if (!slug || !title || !desc)
@@ -76,7 +89,7 @@ async function createPost(req, res) {
       author,
     });
 
-    if (req?.file?.buffer) newPost.image = req.file.buffer;
+    if (uploadedFile) newPost.image = uploadedFile.url;
     if (tags) {
       const tagObjects = await Tag.find({
         slug: { $in: JSON.parse(tags) },
