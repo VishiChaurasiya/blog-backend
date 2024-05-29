@@ -9,7 +9,7 @@ async function getPosts(req, res) {
       _sort,
       _order,
       _page = 1,
-      _limit = 10,
+      _limit = 100,
       tag,
       ...otherParams
     } = req.query;
