@@ -3,7 +3,19 @@ const Tag = require("../models/tag");
 
 async function getPosts(req, res) {
   try {
-    const { keyword, _sort, _order, _page = 1, _limit = 10, tag } = req.query;
+    const {
+      keyword,
+      _sort,
+      _order,
+      _page = 1,
+      _limit = 10,
+      tag,
+      ...otherParams
+    } = req.query;
+
+    if (Object.keys(otherParams).length > 0) {
+      return res.status(400).json({ error: "Invalid query parameters" });
+    }
 
     let query = {};
     if (keyword) {
