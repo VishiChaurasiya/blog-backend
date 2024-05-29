@@ -42,18 +42,23 @@ async function getPosts(req, res) {
 
 async function createPost(req, res) {
   try {
-    const { title, desc, author, tags } = req.body;
+    const { slug, title, desc, author, tags } = req.body;
 
-    if (!title || !desc)
+    if (!slug || !title || !desc)
       return res
         .status(400)
-        .json({ error: "Title and Description must be provided" });
+        .json({ error: "Slug, Title and Description must be provided" });
 
     const duplicateTitle = await Post.findOne({ title });
     if (duplicateTitle)
       return res.status(400).json({ error: "Title must be unique" });
 
+    const duplicateSlug = await Post.findOne({ slug });
+    if (duplicateSlug)
+      return res.status(400).json({ error: "Slug must be unique" });
+
     const newPost = new Post({
+      slug,
       title,
       desc,
       author,
